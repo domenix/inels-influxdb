@@ -1,0 +1,39 @@
+'01': digital_in_short_down
+'02': digital_in_short_up
+'03': digital_in_long_down
+'04': digital_in_long_up
+
+'05': digital_out_switch_on
+'06': digital_out_switch_off
+
+'07': analog_in_value_change
+'08': analog_in_error
+'09': analog_out_value_changed
+'0A': analog_out_switch_on
+'0B': analog_out_switch_off
+'0C': analog_in_error_back
+
+'0D': temperature_high_overflow
+'0E': temperature_high_overflow_back
+'0F': temperature_low_overflow
+'10': temperature_low_overflow_back
+'11': trouble_over_load_error
+'12': trouble_over_load_error_back
+'13': trouble_over_temp_error
+'14': trouble_over_temp_error_back
+'15': temperature_change
+
+'1D': timer_tick
+'1E': timer_elapsed
+'1F': counter_change
+'20': counter_reached_value
+
+'23': program_value_switch_on
+'24': program_value_switch_off
+
+'26': sysint_change
+'27': sysint_change_up
+'28': sysint_change_down
+
+'29': digital_in_switch_on
+'30': digital_in_switch_off

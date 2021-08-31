@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  inels-influxdb:
+    image: inels-influxdb
+    container_name: inels-influxdb
+    networks:
+      - inels-network
+    environment:
+      SERVER_ADDRESS: ${SERVER_ADDRESS}
+      SERVER_PORT: ${SERVER_PORT}
+      DB_ADDRESS: ${DB_ADDRESS}
+      DB_PORT: ${DB_PORT}
+      DB_TOKEN: ${DB_TOKEN}
+      DB_ORG: ${DB_ORG}
+      BUCKET: home
+      TZ: ${TZ}
+    volumes:
+      - ./data/export.imm:/inels_data/export.imm:ro
+      - ./data/event_codes.yml:/inels_data/event_codes.yml:ro
+    restart: unless-stopped
+
+networks:
+  inels-network:
+    name: inels-network
+    driver: bridge

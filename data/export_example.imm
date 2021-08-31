@@ -1,0 +1,8 @@
+﻿PIR_sensor_1 0x01010001 0x00000000 
+PIR_sensor_2 0x01010002 0x00000000 
+PIR_sensor_3 0x01010003 0x00000000 
+floor_1_dimmer 0x01040005 0x00000000 %
+floor_2_dimmer 0x01040006 0x00000000 %
+sauna_temperature 0x01050008 0x00000000 °C
+shower_temperature 0x0105000C 0x00000000 °C
+garage_temperature 0x0105000D 0x00000000 °C
