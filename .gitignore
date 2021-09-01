@@ -138,5 +138,10 @@ dmypy.json
 cython_debug/
 
 *.log
+
 export.imm
+
 .position
+
+**/backup/**
+!**/backup/.gitkeep
