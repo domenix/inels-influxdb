@@ -19,7 +19,7 @@ Steps to start the inels-influxdb container:
 - Edit the properties inside .env according to your preference, keep in mind that `DB_TOKEN` should be something secure
 - Change into `data`
   - `cd data`
-- Either rename export_example.imm to export.imm or export the imm configuration from the iNELS software
+- Either rename export_example.imm to export.imm or export the configuration from the iNELS software and place it in this directory
 - Start the container
   - `docker-compose up -d`
 
@@ -40,12 +40,13 @@ Troubleshooting
 
 You can see the logs of the container by using `docker-compose logs --follow`. It will watch the logs of all services defined in the docker-compose.yml file present in the current directory. Use `docker-compose logs --follow inels-influxdb` in order to follow one specific service or execute `docker logs inels-influxdb` in any directory of your system.
 
+If for any reason you want to see inside of the containers, you can jump into them by executing `docker exec -it <container_name> sh`.
+
 
 Todo
 ===
 - Queue up events in the database thread if the db server becomes unavailable.
 - Database error handling should be better compartmentalized (right now errors are just printed out from the influxdb-client library) and connection loss during saving should be handled as well similarly to the connection thread.
-- Don't save local log files if script is run inside docker
 
 <br>
 
