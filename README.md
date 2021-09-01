@@ -40,7 +40,7 @@ Troubleshooting
 
 You can see the logs of the container by using `docker-compose logs --follow`. It will watch the logs of all services defined in the docker-compose.yml file present in the current directory. Use `docker-compose logs --follow inels-influxdb` in order to follow one specific service or execute `docker logs inels-influxdb` in any directory of your system.
 
-If for any reason you want to see inside of the containers, you can jump into them by executing `docker exec -it <container_name> sh`.
+If you want to see inside of the containers, you can jump into them by executing `docker exec -it <container_name> sh`.
 
 
 Todo
