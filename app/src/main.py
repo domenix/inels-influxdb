@@ -17,9 +17,9 @@ def handle_sigterm(*args):
 if __name__ == "__main__":
     signal.signal(signal.SIGTERM, handle_sigterm)
 
-    parser = argparse.ArgumentParser(description="Connect to INELS iMM telnet port and dump the events to an InfluxDB database.")
-    parser.add_argument("-a", "--addr", required=True, help="IP address of the INELS iMM server")
-    parser.add_argument("-p", "--port", default=1111, type=int, help="Telnet port of the INELS iMM server (default: %(default)s)")
+    parser = argparse.ArgumentParser(description="Connect to iNELS CU telnet port and dump the events to an InfluxDB database.")
+    parser.add_argument("-a", "--addr", required=True, help="IP address of the iNELS CUM server")
+    parser.add_argument("-p", "--port", default=1111, type=int, help="Telnet port of the iNELS CU server (default: %(default)s)")
 
     parser.add_argument("-d", "--defs", type=utils.is_file_readable, required=True, help="Path to the event definitions file (e.g. export.imm)")
     parser.add_argument("-c", "--codes", default="event_codes.yml", type=utils.is_file_readable, help="Path to the event codes file (default: %(default)s)")
@@ -45,7 +45,7 @@ if __name__ == "__main__":
     logger.add(sys.stdout, format="{time} {level} {message}", filter="*", level="INFO")
     logger.add("logs/inels-imm-parser_{time}.log", rotation="2 MB", retention="8 days")
 
-    logger.info("INELS iMM Parser started")
+    logger.info("inels-influxdb started")
 
     # There are two queues, one that has unprocessed events
     # and acts as an intermediary between the connection thread
@@ -103,5 +103,5 @@ if __name__ == "__main__":
                     logger.debug("Work thread {}: joined to Main", work_thread)
                 else:
                     logger.debug("Work thread {} has died", work_thread)
-            logger.info("INELS iMM Parser exiting")
+            logger.info("inels-influxdb exiting")
             sys.exit(0)

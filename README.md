@@ -17,6 +17,9 @@ Steps to start the inels-influxdb container:
 - Rename example.env file to .env
   - `mv example.env`
 - Edit the properties inside .env according to your preference, keep in mind that `DB_TOKEN` should be something secure
+- Change into `data`
+  - `cd data`
+- Either rename export_example.imm to export.imm or export the imm configuration from the iNELS software
 - Start the container
   - `docker-compose up -d`
 
@@ -42,19 +45,8 @@ Todo
 ===
 - Queue up events in the database thread if the db server becomes unavailable.
 - Database error handling should be better compartmentalized (right now errors are just printed out from the influxdb-client library) and connection loss during saving should be handled as well similarly to the connection thread.
-<!-- 
-[![buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/domenix) -->
+- Don't save local log files if script is run inside docker
 
-<!-- <div align="center"><div>
+<br>
 
-<p align="center">
-  <img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" href=https://www.buymeacoffee.com/domenix>
-</p> -->
-
-<div>
-<a href="https://www.buymeacoffee.com/domenix">
-  <img align="center" src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png">
-</a>
-</div>
-
-<!-- <p align="center">centered text</p> -->
+<span style="display:block;text-align:center">[![buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/domenix)</span>

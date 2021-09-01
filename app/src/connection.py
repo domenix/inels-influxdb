@@ -29,7 +29,7 @@ class ConnectionThread(Thread):
                 while not self.stop_event.is_set():
                     if retry_count < max_retries:
                         try:
-                            logger.info("Connecting to INELS iMM at {}:{}", self.addr, self.port)
+                            logger.info("Connecting to iNELS CU at {}:{}", self.addr, self.port)
                             s.connect((self.addr, self.port))
                             break
                         except (ConnectionRefusedError, TimeoutError, socket.gaierror) as e:
@@ -44,7 +44,7 @@ class ConnectionThread(Thread):
 
                 wait_interval = 1
                 retry_count = 0
-                logger.info("Connected to INELS iMM")
+                logger.info("Connected to iNELS CU")
                 while not self.stop_event.is_set():
                     try:
                         logger.debug("Receiving data...")

@@ -74,7 +74,7 @@ class ParserThread(Thread):
                 
             config_lines_lower.append(new_config)
 
-        logger.debug("INELS BUS event definitions loaded")
+        logger.debug("iNELS BUS event definitions loaded")
         return config_lines_lower
 
     def get_event_codes(self, event_codes_file):
@@ -85,7 +85,7 @@ class ParserThread(Thread):
                 logger.critical("Invalid event codes, exiting")
                 sys.exit(1)
 
-        logger.debug("INELS BUS event codes loaded")
+        logger.debug("iNELS BUS event codes loaded")
         return event_codes
 
     def parse(self, inels_event):
