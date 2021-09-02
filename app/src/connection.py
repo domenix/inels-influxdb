@@ -19,54 +19,72 @@ class ConnectionThread(Thread):
 
     def run(self):
         logger.debug("Thread execution started")
-        retry_count = 0
-        max_retries = 5
-        wait_interval = 1
+
 
         while not self.stop_event.is_set():
-            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                # Retry if connection fails
-                while not self.stop_event.is_set():
-                    if retry_count < max_retries:
+            socket_retry_count = 0
+            socket_max_retries = 5
+            socket_wait_interval = 1
+            try:
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    s.settimeout(5)
+
+                    while not self.stop_event.is_set():
+                        retry_count = 0
+                        max_retries = 5
+                        wait_interval = 1
+                        if retry_count < max_retries:
+                            try:
+                                logger.info("Connecting to iNELS CU at {}:{}", self.addr, self.port)
+                                s.connect((self.addr, self.port))
+                                s.settimeout(None)
+                                break
+                            except (ConnectionRefusedError, TimeoutError, socket.gaierror) as e:
+                                s.settimeout(None)
+                                # s.settimeout(5)
+                                logger.warning("Failed, retrying again in {} seconds, {} tries left (error: {})", wait_interval, max_retries - retry_count - 1, e)
+                                time.sleep(wait_interval)
+                                wait_interval = utils.get_new_wait_interval(wait_interval)
+                                retry_count += 1
+                                continue
+                        else:
+                            logger.critical("Failed all retries, exiting")
+                            os._exit(1)
+
+                    wait_interval = 1
+                    retry_count = 0
+                    logger.info("Connected to iNELS CU")
+                    while not self.stop_event.is_set():
                         try:
-                            logger.info("Connecting to iNELS CU at {}:{}", self.addr, self.port)
-                            s.connect((self.addr, self.port))
+                            logger.debug("Receiving data...")
+                            s.settimeout(5.0)
+                            data = s.recv(1024)
+                        except (ConnectionAbortedError, ConnectionResetError):
+                            logger.warning("Connection interrupted, reconnecting")
                             break
-                        except (ConnectionRefusedError, TimeoutError, socket.gaierror) as e:
-                            logger.warning("Failed, retrying again in {} seconds, {} tries left (error: {})", wait_interval, max_retries - retry_count - 1, e)
-                            time.sleep(wait_interval)
-                            wait_interval = utils.get_new_wait_interval(wait_interval)
-                            retry_count += 1
-                            continue
-                    else:
-                        logger.critical("Failed all retries, exiting")
-                        os._exit(1)
 
-                wait_interval = 1
-                retry_count = 0
-                logger.info("Connected to iNELS CU")
-                while not self.stop_event.is_set():
-                    try:
-                        logger.debug("Receiving data...")
-                        s.settimeout(5.0)
-                        data = s.recv(1024)
-                    except (ConnectionAbortedError, ConnectionResetError):
-                        logger.warning("Connection interrupted, reconnecting")
-                        break
+                        if len(data):
+                            data_string = data.decode("ascii")
+                            events = data_string.splitlines()
 
-                    if len(data):
-                        data_string = data.decode("ascii")
-                        events = data_string.splitlines()
+                            logger.debug("Bytes received: {}", data)
 
-                        logger.debug("Bytes received: {}", data)
+                            for event in events:
+                                logger.debug("Inserting the following event into queue: {}", event)
+                                self.unprocessed_events.put(event)
 
-                        for event in events:
-                            logger.debug("Inserting the following event into queue: {}", event)
-                            self.unprocessed_events.put(event)
-
-                    else:
-                        # Retry reconnecting if empty bytes are being received
-                        logger.warning("Connection interrupted, retrying")
-                        break
+                        else:
+                            # Retry reconnecting if empty bytes are being received
+                            logger.warning("Connection interrupted, retrying")
+                            break
+            except socket.timeout as e:
+                if socket_retry_count < socket_max_retries:
+                    logger.warning("Failed during socket creation, retrying again in {} seconds, {} tries left (error: {})", socket_wait_interval, socket_max_retries - socket_retry_count - 1, e)
+                    time.sleep(socket_wait_interval)
+                    socket_wait_interval = utils.get_new_wait_interval(socket_wait_interval)
+                    socket_retry_count += 1
+                else:
+                    logger.critical("Failed all retries, exiting")
+                    os._exit(1)
 
         logger.debug("Thread execution finished")

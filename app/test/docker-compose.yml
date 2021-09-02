@@ -2,12 +2,12 @@ version: '3.8'
 
 services:
   inels-imm-tester:
-    image: inels-imm-tester
-    container_name: inels-imm-tester
+    image: inels-tester
+    container_name: inels-tester
     networks:
-      - inels-imm-network
+      - inels-network
     restart: unless-stopped
 
 networks:
-  inels-imm-network:
+  inels-network:
     external: true

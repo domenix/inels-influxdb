@@ -42,12 +42,15 @@ You can see the logs of the container by using `docker-compose logs --follow`. I
 
 If you want to see inside of the containers, you can jump into them by executing `docker exec -it <container_name> sh`.
 
+Building the image
+===
+TODO
+
+
 
 Todo
 ===
 - Queue up events in the database thread if the db server becomes unavailable.
 - Database error handling should be better compartmentalized (right now errors are just printed out from the influxdb-client library) and connection loss during saving should be handled as well similarly to the connection thread.
 
-<br>
-
-<span style="display:block;text-align:center">[![buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/domenix)</span>
+[![buy me a coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/domenix)

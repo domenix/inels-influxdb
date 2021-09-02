@@ -8,6 +8,7 @@ from loguru import logger
 import argparse
 import utils
 import signal
+import os
 
 # Handle SIGTERM from Docker, solution from https://lemanchet.fr/articles/gracefully-stop-python-docker-container.html
 def handle_sigterm(*args):
@@ -42,8 +43,19 @@ if __name__ == "__main__":
     dborg = args.dborg
     bucket = args.bucket
 
-    logger.add(sys.stdout, format="{time} {level} {message}", filter="*", level="INFO")
-    logger.add("logs/inels-imm-parser_{time}.log", rotation="2 MB", retention="8 days")
+    log_config = {
+        "handlers": [
+            {"sink": sys.stderr, "format": "{time} - {level} - {message}"}
+        ]
+    }
+
+    RUNNING_INSIDE_DOCKER = os.environ.get('RUNNING_INSIDE_DOCKER')
+    if not (RUNNING_INSIDE_DOCKER and RUNNING_INSIDE_DOCKER == '1'):
+        log_config['handlers'].append(
+            {"sink": "logs/inels-influxdb_{time}.log", "format": "{time} - {level} - {message}",  "rotation": "2 MB", "retention": "8 days"}
+        )
+
+    logger.configure(**log_config)
 
     logger.info("inels-influxdb started")
 
