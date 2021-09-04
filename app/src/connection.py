@@ -9,6 +9,7 @@ import utils
 class ConnectionThread(Thread):
     def __init__(self, unprocessed_events, addr, port):
         Thread.__init__(self)
+        self.name = "Connection"
         self.stop_event = Event()
         self.unprocessed_events = unprocessed_events
         self.addr = addr
@@ -18,8 +19,7 @@ class ConnectionThread(Thread):
         return self.__class__.__name__
 
     def run(self):
-        logger.debug("Thread execution started")
-
+        logger.debug(f"{self.name} thread started")
 
         while not self.stop_event.is_set():
             socket_retry_count = 0
@@ -59,7 +59,7 @@ class ConnectionThread(Thread):
                             logger.debug("Receiving data...")
                             s.settimeout(5.0)
                             data = s.recv(1024)
-                        except (ConnectionAbortedError, ConnectionResetError):
+                        except (ConnectionAbortedError, ConnectionResetError, socket.timeout):
                             logger.warning("Connection interrupted, reconnecting")
                             break
 
@@ -87,4 +87,4 @@ class ConnectionThread(Thread):
                     logger.critical("Failed all retries, exiting")
                     os._exit(1)
 
-        logger.debug("Thread execution finished")
+        logger.debug(f"{self.name} thread finished")

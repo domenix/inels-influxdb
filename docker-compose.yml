@@ -15,6 +15,11 @@ services:
       DB_ORG: ${DB_ORG}
       BUCKET: home
       TZ: ${TZ}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10MB"
+        max-file: "10"
     volumes:
       - ./data/export.imm:/inels_data/export.imm:ro
       - ./data/event_codes.yml:/inels_data/event_codes.yml:ro

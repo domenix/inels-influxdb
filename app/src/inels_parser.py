@@ -22,6 +22,7 @@ import sys
 class ParserThread(Thread):
     def __init__(self, unprocessed_events, processed_events, definitions_file, event_codes_file):
         Thread.__init__(self)
+        self.name = "Parser"
         self.stop_event = Event()
         self.unprocessed_events = unprocessed_events
         self.processed_events = processed_events
@@ -69,9 +70,9 @@ class ParserThread(Thread):
             for item in config:
                 if re.match(hex_regex, item):
                     item = item.lower()
-                
+
                 new_config.append(item)
-                
+
             config_lines_lower.append(new_config)
 
         logger.debug("iNELS BUS event definitions loaded")
@@ -146,7 +147,7 @@ class ParserThread(Thread):
             raise ValueError
 
     def run(self):
-        logger.debug("Thread execution started")
+        logger.debug(f"{self.name} thread started")
         while not self.stop_event.is_set():
             try:
                 queue_result = self.unprocessed_events.get(True, 1)
@@ -161,4 +162,4 @@ class ParserThread(Thread):
 
             logger.debug("Inserting the following parsed event into queue: {}", parsed_result)
             self.processed_events.put(parsed_result)
-        logger.debug("Thread execution finished")
+        logger.debug(f"{self.name} thread finished")

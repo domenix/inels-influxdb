@@ -17,6 +17,8 @@ def handle_sigterm(*args):
 
 if __name__ == "__main__":
     signal.signal(signal.SIGTERM, handle_sigterm)
+    sys.excepthook = utils.handle_exception
+    utils.patch_threading_excepthook()
 
     parser = argparse.ArgumentParser(description="Connect to iNELS CU telnet port and dump the events to an InfluxDB database.")
     parser.add_argument("-a", "--addr", required=True, help="IP address of the iNELS CUM server")
@@ -45,14 +47,14 @@ if __name__ == "__main__":
 
     log_config = {
         "handlers": [
-            {"sink": sys.stderr, "format": "{time} - {level} - {message}"}
+            {"sink": sys.stderr, "format": "{time} - {level} - {module} - {message}", "level": "DEBUG"}
         ]
     }
 
     RUNNING_INSIDE_DOCKER = os.environ.get('RUNNING_INSIDE_DOCKER')
     if not (RUNNING_INSIDE_DOCKER and RUNNING_INSIDE_DOCKER == '1'):
         log_config['handlers'].append(
-            {"sink": "logs/inels-influxdb_{time}.log", "format": "{time} - {level} - {message}",  "rotation": "2 MB", "retention": "8 days"}
+            {"sink": "logs/inels-influxdb_{time}.log", "format": "{time} - {level} - {module} - {message}",  "rotation": "2 MB", "retention": "8 days"}
         )
 
     logger.configure(**log_config)
@@ -76,7 +78,7 @@ if __name__ == "__main__":
     parser_thread = ParserThread(unprocessed_events, processed_events, defs, codes)
     database_thread = DatabaseThread(processed_events, dbaddr, dbport, dbtoken, dborg, bucket)
 
-    work_threads.append(connection_thread)
+    # work_threads.append(connection_thread)
     work_threads.append(parser_thread)
     work_threads.append(database_thread)
 

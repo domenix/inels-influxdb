@@ -9,11 +9,13 @@ import socket
 import time
 import os
 import utils
+import sys
 
 
 class DatabaseThread(Thread):
     def __init__(self, processed_events, db_addr, db_port, db_token, db_org, db_bucket):
         Thread.__init__(self)
+        self.name="Database"
         self.stop_event = Event()
         self.processed_events = processed_events
         self.db_addr = db_addr
@@ -43,7 +45,7 @@ class DatabaseThread(Thread):
         return int(offset_time.timestamp() * 1000000000)
 
     def run(self):
-        logger.debug("Thread execution started")
+        logger.debug(f"{self.name} thread started")
 
         retry_count = 0
         max_retries = 5
