@@ -72,7 +72,7 @@ if __name__ == "__main__":
     parser_thread = ParserThread(unprocessed_events, processed_events, defs, codes)
     database_thread = DatabaseThread(processed_events, dbaddr, dbport, dbtoken, dborg, bucket)
 
-    # work_threads.append(connection_thread)
+    work_threads.append(connection_thread)
     work_threads.append(parser_thread)
     work_threads.append(database_thread)
 
