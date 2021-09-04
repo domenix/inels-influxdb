@@ -45,17 +45,11 @@ if __name__ == "__main__":
     dborg = args.dborg
     bucket = args.bucket
 
-    log_config = {
-        "handlers": [
-            {"sink": sys.stderr, "format": "{time} - {level} - {module} - {message}", "level": "DEBUG"}
-        ]
-    }
+    log_config = {"handlers": [{"sink": sys.stderr, "format": "{time} - {level} - {module} - {message}", "level": "DEBUG"}]}
 
-    RUNNING_INSIDE_DOCKER = os.environ.get('RUNNING_INSIDE_DOCKER')
-    if not (RUNNING_INSIDE_DOCKER and RUNNING_INSIDE_DOCKER == '1'):
-        log_config['handlers'].append(
-            {"sink": "logs/inels-influxdb_{time}.log", "format": "{time} - {level} - {module} - {message}",  "rotation": "2 MB", "retention": "8 days"}
-        )
+    RUNNING_INSIDE_DOCKER = os.environ.get("RUNNING_INSIDE_DOCKER")
+    if not (RUNNING_INSIDE_DOCKER and RUNNING_INSIDE_DOCKER == "1"):
+        log_config["handlers"].append({"sink": "logs/inels-influxdb_{time}.log", "format": "{time} - {level} - {module} - {message}", "rotation": "2 MB", "retention": "8 days"})
 
     logger.configure(**log_config)
 
