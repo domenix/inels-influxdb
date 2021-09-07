@@ -18,8 +18,9 @@ services:
     logging:
       driver: "json-file"
       options:
+        # max-size 10MB, max-file 10 is enough to store approx 5 hours of logs
         max-size: "10MB"
-        max-file: "10"
+        max-file: "50"
     volumes:
       - ./data/export.imm:/inels_data/export.imm:ro
       - ./data/event_codes.yml:/inels_data/event_codes.yml:ro
