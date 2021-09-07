@@ -112,6 +112,7 @@ class ParserThread(Thread):
             try:
                 inels_event["event_id"] = self.event_codes[event_code]
             except KeyError:
+                inels_event["event_id"] = event_code
                 logger.warning("Unknown event code, storing as is: {}", event_code)
 
             # Iterate over all config lines
