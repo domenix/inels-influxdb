@@ -107,8 +107,12 @@ class ParserThread(Thread):
             orig_inels_event = event_matched.groupdict()
             inels_event = {}
 
-            # Set textual event id before doing anything else
-            inels_event["event_id"] = self.event_codes[orig_inels_event["event_id"].upper()]
+            # Set textual event id
+            event_code = orig_inels_event["event_id"].upper()
+            try:
+                inels_event["event_id"] = self.event_codes[event_code]
+            except KeyError:
+                logger.warning("Unknown event code, storing as is: {}", event_code)
 
             # Iterate over all config lines
             for config in self.config_lines:
