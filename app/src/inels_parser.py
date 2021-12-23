@@ -101,7 +101,7 @@ class ParserThread(Thread):
         """
 
         # Test event string before processing
-        event_format_regex = r"EVENT (?P<event_id>[0-9a-fA-F]+) (?P<source_id>0[xX][0-9a-fA-F]+) (?P<event_value>[0-9]+)"
+        event_format_regex = r"EVENT (?P<event_id>[0-9a-fA-F]+) (?P<source_id>0[xX][0-9a-fA-F]+) (?P<event_value>-?[0-9]+)"
         event_matched = re.match(event_format_regex, inels_event)
         if event_matched:
             orig_inels_event = event_matched.groupdict()
